@@ -10,19 +10,19 @@ redirect_from:
   - /query-dsl/aggregations/bucket/
   - /aggregations/bucket-agg/
 ---
-
 # Bucket aggregations
 
-Bucket aggregations categorize sets of documents as buckets. The type of bucket aggregation determines the bucket for a given document.
+Bucket aggregations categorize sets of documents into buckets. The type of bucket aggregation determines which bucket a given document belongs to.
 
-You can use bucket aggregations to implement faceted navigation (usually placed as a sidebar on a search result landing page) to help your users filter the results.
+You can use bucket aggregations to implement faceted navigation (usually placed as a sidebar on a search result landing page) to help your users filter results.
 
 ## Supported bucket aggregations
 
 OpenSearch supports the following bucket aggregations:
 
 - [Adjacency matrix]({{site.url}}{{site.baseurl}}/aggregations/bucket/adjacency-matrix/)
-- [Children]({{site.url}}{{site.baseurl}}/aggregations/bucket/children)
+- [Auto-interval date histogram]({{site.url}}{{site.baseurl}}/aggregations/bucket/auto-interval-date-histogram/)
+- [Children]({{site.url}}{{site.baseurl}}/aggregations/bucket/children/)
 - [Date histogram]({{site.url}}{{site.baseurl}}/aggregations/bucket/date-histogram/)
 - [Date range]({{site.url}}{{site.baseurl}}/aggregations/bucket/date-range/)
 - [Diversified sampler]({{site.url}}{{site.baseurl}}/aggregations/bucket/diversified-sampler/)
@@ -44,3 +44,50 @@ OpenSearch supports the following bucket aggregations:
 - [Significant terms]({{site.url}}{{site.baseurl}}/aggregations/bucket/significant-terms/)
 - [Significant text]({{site.url}}{{site.baseurl}}/aggregations/bucket/significant-text/)
 - [Terms]({{site.url}}{{site.baseurl}}/aggregations/bucket/terms/)
+
+## Common parameters
+
+Most bucket aggregations support the following common parameters:
+
+- `field`: The field to aggregate on.
+- `script`: A script to generate values to aggregate on.
+- `missing`: A value to use for documents that are missing the field.
+
+Refer to the documentation for each specific aggregation type for details on additional parameters.
+
+## Nesting aggregations
+
+You can nest bucket aggregations inside other bucket or metric aggregations to create more complex analyses. For example:
+
+```json
+GET my-index/_search
+{
+  "aggs": {
+    "genres": {
+      "terms": {
+        "field": "genre"  
+      },
+      "aggs": {
+        "avg_rating": {
+          "avg": {
+            "field": "rating"
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+This example first buckets documents by genre, then calculates the average rating for each genre bucket.
+
+## Performance considerations 
+
+Bucket aggregations can be resource intensive, especially on high-cardinality fields or when nesting multiple aggregations. Consider the following to optimize performance:
+
+- Use `size` to limit the number of buckets returned.
+- Apply a `filter` aggregation first to reduce the document set.
+- For high-cardinality fields, consider using `significant_terms` instead of `terms`.
+- Monitor aggregation performance and adjust as needed.
+
+For more details on each bucket aggregation type, refer to its specific documentation page.
