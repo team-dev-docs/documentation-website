@@ -39,6 +39,7 @@ OpenSearch supports the following bucket aggregations:
 - [Multi-terms]({{site.url}}{{site.baseurl}}/aggregations/bucket/multi-terms/)
 - [Nested]({{site.url}}{{site.baseurl}}/aggregations/bucket/nested/)
 - [Range]({{site.url}}{{site.baseurl}}/aggregations/bucket/range/)
+- [Random sort]({{site.url}}{{site.baseurl}}/aggregations/bucket/random-sort/)
 - [Reverse nested]({{site.url}}{{site.baseurl}}/aggregations/bucket/reverse-nested/)
 - [Sampler]({{site.url}}{{site.baseurl}}/aggregations/bucket/sampler/)
 - [Significant terms]({{site.url}}{{site.baseurl}}/aggregations/bucket/significant-terms/)
