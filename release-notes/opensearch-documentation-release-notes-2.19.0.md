@@ -25,12 +25,14 @@ The OpenSearch 2.19.0 documentation includes the following additions and updates
 - Add OpenSearch Flow OSD plugin [#9101](https://github.com/opensearch-project/documentation-website/pull/9101)
 - Update hot reload documentation to show how DN validation can be skipped [#9079](https://github.com/opensearch-project/documentation-website/pull/9079)
 - Update k-NN Cosine formula [#9078](https://github.com/opensearch-project/documentation-website/pull/9078)
-= Update Ada Grad as the default optimiser. [#9061](https://github.com/opensearch-project/documentation-website/pull/9061)
+- Update Ada Grad as the default optimiser [#9061](https://github.com/opensearch-project/documentation-website/pull/9061)
 - Add documentation about explain in hybrid query and hybrid_score_explanation processor [#9053](https://github.com/opensearch-project/documentation-website/pull/9053)
 - Add Query Insights local index delete after documentation [#9052](https://github.com/opensearch-project/documentation-website/pull/9052)
-- Add support for Bedrock Rerank API #9027 [#9029](https://github.com/opensearch-project/documentation-website/pull/9029)
+- Add support for Bedrock Rerank API [#9029](https://github.com/opensearch-project/documentation-website/pull/9029)
 - Add validation requirement for message fields [#9000](https://github.com/opensearch-project/documentation-website/pull/9000)
 - Add documentation for workspace privacy [#8994](https://github.com/opensearch-project/documentation-website/pull/8994)
 - Add documentation for pruning neural sparse vectors [#8984](https://github.com/opensearch-project/documentation-website/pull/8984)
 - Add document the usage of update document API with ingest pipeline [#8874](https://github.com/opensearch-project/documentation-website/pull/8874)
 - Update innerHits of nested k-NN fields [#8822](https://github.com/opensearch-project/documentation-website/pull/8822)
+
+For detailed information on each update, please refer to the linked pull requests.
