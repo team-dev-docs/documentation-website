@@ -34,3 +34,11 @@ The OpenSearch 2.19.0 documentation includes the following additions and updates
 - Add documentation for pruning neural sparse vectors [#8984](https://github.com/opensearch-project/documentation-website/pull/8984)
 - Add document the usage of update document API with ingest pipeline [#8874](https://github.com/opensearch-project/documentation-website/pull/8874)
 - Update innerHits of nested k-NN fields [#8822](https://github.com/opensearch-project/documentation-website/pull/8822)
+
+## Updates to existing documentation
+
+- Replace Thread::getId() with Thread::threadId() [#18237](https://github.com/opensearch-project/OpenSearch/pull/18237)
+  - Deprecated usages of `Thread::getId()` have been replaced with `Thread::threadId()` introduced in Java 19.
+  - This change ensures compatibility with newer Java versions and eliminates deprecation warnings.
+  - The updates are scoped to actual `Thread` usage and do not affect domain-specific `getId()` calls on objects like `Task`, `Node`, etc.
+  - This change improves code maintainability and future-proofs the codebase against Java updates.
