@@ -1,36 +1,43 @@
-# OpenSearch Documentation Website 2.19.0 Release Notes
+# OpenSearch Documentation 2.19.0 Release Notes
 
-The OpenSearch 2.19.0 documentation includes the following additions and updates.
+## Replacing Thread::getId() with Thread::threadId()
 
-## New documentation for 2.19.0
+In OpenSearch 2.19.0, we've made an important update to improve compatibility with newer Java versions and eliminate deprecation warnings. This change involves replacing deprecated usages of `Thread::getId()` with `Thread::threadId()`, which was introduced in Java 19.
 
-- Adds star-tree search changes related to new aggregations supported [#9163](https://github.com/opensearch-project/documentation-website/pull/9163)
-- Adds QueryInsightsDashboard [#9157](https://github.com/opensearch-project/documentation-website/pull/9157)
-- Add Convert Index to remote documentation [#9156](https://github.com/opensearch-project/documentation-website/pull/9156)
-- Adds details for using index_thread_qty for Lucene library [#9152](https://github.com/opensearch-project/documentation-website/pull/9152)
-- Update threshold for 2.19 [#9151](https://github.com/opensearch-project/documentation-website/pull/9151)
-- Add avx512_spr documentation [#9148](https://github.com/opensearch-project/documentation-website/pull/9148)
-- Add documentation for plugin as a service [#9144](https://github.com/opensearch-project/documentation-website/pull/9144)
-- Add AD flatten result index feature [#9140](https://github.com/opensearch-project/documentation-website/pull/9140)
-- Add documentation for `wait_for_completion_timeout` Parameter [#9138](https://github.com/opensearch-project/documentation-website/pull/9138)
-- Add feature direction to AD docs [#9137](https://github.com/opensearch-project/documentation-website/pull/9137)
-- Add verbose_pipeline section in using-search-pipeline [#9130](https://github.com/opensearch-project/documentation-website/pull/9130)
-- Query Insights 2.19 documentation [#9120](https://github.com/opensearch-project/documentation-website/pull/9120)
-- Add template query [#9119](https://github.com/opensearch-project/documentation-website/pull/9119)
-- Add RRF documentation for hybrid search [#9117](https://github.com/opensearch-project/documentation-website/pull/9117)
-- Add Pagination in hybrid query [#9109](https://github.com/opensearch-project/documentation-website/pull/9109)
-- Mark nmslib references for vector search as deprecated [#9107](https://github.com/opensearch-project/documentation-website/pull/9107)
-- Add in-place SSL certs hot reload documentation [#9103](https://github.com/opensearch-project/documentation-website/pull/9103)
-- Add binary Lucene vector updates for 2.19 [#9102](https://github.com/opensearch-project/documentation-website/pull/9102)
-- Add OpenSearch Flow OSD plugin [#9101](https://github.com/opensearch-project/documentation-website/pull/9101)
-- Update hot reload documentation to show how DN validation can be skipped [#9079](https://github.com/opensearch-project/documentation-website/pull/9079)
-- Update k-NN Cosine formula [#9078](https://github.com/opensearch-project/documentation-website/pull/9078)
-= Update Ada Grad as the default optimiser. [#9061](https://github.com/opensearch-project/documentation-website/pull/9061)
-- Add documentation about explain in hybrid query and hybrid_score_explanation processor [#9053](https://github.com/opensearch-project/documentation-website/pull/9053)
-- Add Query Insights local index delete after documentation [#9052](https://github.com/opensearch-project/documentation-website/pull/9052)
-- Add support for Bedrock Rerank API #9027 [#9029](https://github.com/opensearch-project/documentation-website/pull/9029)
-- Add validation requirement for message fields [#9000](https://github.com/opensearch-project/documentation-website/pull/9000)
-- Add documentation for workspace privacy [#8994](https://github.com/opensearch-project/documentation-website/pull/8994)
-- Add documentation for pruning neural sparse vectors [#8984](https://github.com/opensearch-project/documentation-website/pull/8984)
-- Add document the usage of update document API with ingest pipeline [#8874](https://github.com/opensearch-project/documentation-website/pull/8874)
-- Update innerHits of nested k-NN fields [#8822](https://github.com/opensearch-project/documentation-website/pull/8822)
+### Key Changes
+
+- The `Thread::getId()` method has been replaced with `Thread::threadId()` throughout the codebase.
+- This change affects various components of OpenSearch, including common utilities, language expressions, monitoring, task management, and thread pool operations.
+- The update is scoped to actual `Thread` usage and does not affect domain-specific `getId()` calls on objects like `Task`, `Node`, etc.
+
+### Affected Components
+
+The following components have been updated:
+
+1. Common utilities
+2. Language expressions
+3. JVM monitoring
+4. Query profiling
+5. Task resource tracking
+6. Thread pool management
+7. Test cases
+
+### Impact and Benefits
+
+- **Improved Compatibility**: This change ensures that OpenSearch remains compatible with newer Java versions, particularly Java 19 and beyond.
+- **Deprecation Warning Removal**: By adopting the new `threadId()` method, we've eliminated deprecation warnings related to `Thread::getId()`.
+- **Future-Proofing**: This update helps in maintaining the codebase and prepares OpenSearch for future Java updates.
+
+### Developer Notes
+
+If you're working with OpenSearch code or developing plugins, please note the following:
+
+- When dealing with thread IDs, use `Thread.currentThread().threadId()` instead of `Thread.currentThread().getId()`.
+- This change does not affect the behavior of the code; it's a straightforward replacement of the method call.
+- Existing tests have been updated to reflect this change, ensuring continued reliability of the codebase.
+
+### Conclusion
+
+This update is part of our ongoing efforts to keep OpenSearch up-to-date with the latest Java developments. While it doesn't introduce new features, it's an important maintenance update that helps ensure the long-term viability and performance of OpenSearch.
+
+For more detailed information about this change, you can refer to the [pull request #18237](https://github.com/opensearch-project/OpenSearch/pull/18237) in the OpenSearch GitHub repository.
