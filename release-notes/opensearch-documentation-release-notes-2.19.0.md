@@ -1,36 +1,94 @@
-# OpenSearch Documentation Website 2.19.0 Release Notes
+# OpenSearch Documentation Release Notes 2.19.0
 
-The OpenSearch 2.19.0 documentation includes the following additions and updates.
+## New Features
 
-## New documentation for 2.19.0
+### File Cache Reference Count Retrieval
 
-- Adds star-tree search changes related to new aggregations supported [#9163](https://github.com/opensearch-project/documentation-website/pull/9163)
-- Adds QueryInsightsDashboard [#9157](https://github.com/opensearch-project/documentation-website/pull/9157)
-- Add Convert Index to remote documentation [#9156](https://github.com/opensearch-project/documentation-website/pull/9156)
-- Adds details for using index_thread_qty for Lucene library [#9152](https://github.com/opensearch-project/documentation-website/pull/9152)
-- Update threshold for 2.19 [#9151](https://github.com/opensearch-project/documentation-website/pull/9151)
-- Add avx512_spr documentation [#9148](https://github.com/opensearch-project/documentation-website/pull/9148)
-- Add documentation for plugin as a service [#9144](https://github.com/opensearch-project/documentation-website/pull/9144)
-- Add AD flatten result index feature [#9140](https://github.com/opensearch-project/documentation-website/pull/9140)
-- Add documentation for `wait_for_completion_timeout` Parameter [#9138](https://github.com/opensearch-project/documentation-website/pull/9138)
-- Add feature direction to AD docs [#9137](https://github.com/opensearch-project/documentation-website/pull/9137)
-- Add verbose_pipeline section in using-search-pipeline [#9130](https://github.com/opensearch-project/documentation-website/pull/9130)
-- Query Insights 2.19 documentation [#9120](https://github.com/opensearch-project/documentation-website/pull/9120)
-- Add template query [#9119](https://github.com/opensearch-project/documentation-website/pull/9119)
-- Add RRF documentation for hybrid search [#9117](https://github.com/opensearch-project/documentation-website/pull/9117)
-- Add Pagination in hybrid query [#9109](https://github.com/opensearch-project/documentation-website/pull/9109)
-- Mark nmslib references for vector search as deprecated [#9107](https://github.com/opensearch-project/documentation-website/pull/9107)
-- Add in-place SSL certs hot reload documentation [#9103](https://github.com/opensearch-project/documentation-website/pull/9103)
-- Add binary Lucene vector updates for 2.19 [#9102](https://github.com/opensearch-project/documentation-website/pull/9102)
-- Add OpenSearch Flow OSD plugin [#9101](https://github.com/opensearch-project/documentation-website/pull/9101)
-- Update hot reload documentation to show how DN validation can be skipped [#9079](https://github.com/opensearch-project/documentation-website/pull/9079)
-- Update k-NN Cosine formula [#9078](https://github.com/opensearch-project/documentation-website/pull/9078)
-= Update Ada Grad as the default optimiser. [#9061](https://github.com/opensearch-project/documentation-website/pull/9061)
-- Add documentation about explain in hybrid query and hybrid_score_explanation processor [#9053](https://github.com/opensearch-project/documentation-website/pull/9053)
-- Add Query Insights local index delete after documentation [#9052](https://github.com/opensearch-project/documentation-website/pull/9052)
-- Add support for Bedrock Rerank API #9027 [#9029](https://github.com/opensearch-project/documentation-website/pull/9029)
-- Add validation requirement for message fields [#9000](https://github.com/opensearch-project/documentation-website/pull/9000)
-- Add documentation for workspace privacy [#8994](https://github.com/opensearch-project/documentation-website/pull/8994)
-- Add documentation for pruning neural sparse vectors [#8984](https://github.com/opensearch-project/documentation-website/pull/8984)
-- Add document the usage of update document API with ingest pipeline [#8874](https://github.com/opensearch-project/documentation-website/pull/8874)
-- Update innerHits of nested k-NN fields [#8822](https://github.com/opensearch-project/documentation-website/pull/8822)
+A new method has been exposed to retrieve the reference count of an entry in the FileCache. This feature allows for better management and monitoring of file cache entries.
+
+#### Changes in FileCache.java
+
+The `FileCache` class has been updated with a new method:
+
+```java
+@Override
+public Integer getRef(Path key) {
+    return theCache.getRef(key);
+}
+```
+
+This method allows retrieving the reference count for a given key in the file cache.
+
+#### Changes in LRUCache.java
+
+The `LRUCache` class now implements the `getRef` method:
+
+```java
+@Override
+public Integer getRef(K key) {
+    Objects.requireNonNull(key);
+    lock.lock();
+    try {
+        Node node = data.get(key);
+        if (node != null) {
+            return node.refCount;
+        }
+        return null;
+    } finally {
+        lock.unlock();
+    }
+}
+```
+
+This implementation provides thread-safe access to the reference count of a cache entry.
+
+#### Changes in RefCountedCache.java
+
+The `RefCountedCache` interface has been updated to include the `getRef` method:
+
+```java
+/**
+ * get the reference count for key {@code key}.
+ */
+Integer getRef(K key);
+```
+
+#### Changes in SegmentedCache.java
+
+The `SegmentedCache` class now implements the `getRef` method:
+
+```java
+@Override
+public Integer getRef(K key) {
+    if (key == null) throw new NullPointerException();
+    return segmentFor(key).getRef(key);
+}
+```
+
+This implementation delegates the reference count retrieval to the appropriate cache segment.
+
+## Impact and Usage
+
+This new feature allows developers and system administrators to:
+
+1. Monitor the usage of specific entries in the file cache
+2. Implement more sophisticated cache management strategies
+3. Debug potential issues related to file cache reference counting
+
+To use this new functionality, call the `getRef` method on a `FileCache` instance with the desired key:
+
+```java
+Integer refCount = fileCache.getRef(path);
+```
+
+This will return the current reference count for the specified path in the file cache, or `null` if the entry doesn't exist.
+
+## Compatibility
+
+This change is backwards compatible and does not affect existing functionality. It only adds a new method to retrieve information that was previously not accessible.
+
+## Testing
+
+The pull request includes additional test cases to verify the correct implementation of the new `getRef` method across various cache implementations.
+
+For more detailed information, please refer to the [pull request #18259](https://github.com/opensearch-project/OpenSearch/pull/18259) in the OpenSearch repository.
